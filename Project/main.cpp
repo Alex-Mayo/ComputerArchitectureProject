@@ -2,6 +2,8 @@
 extern "C" {
     void display_message(const char* message);
     char read_input();
+
+
 }
 
 using namespace std;
