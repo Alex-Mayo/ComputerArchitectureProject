@@ -21,8 +21,15 @@ player_input db 0        ; Variable to store player's input
 
 newline db 10, 0         ; Newline character for formatting
 
+welcome_message db "Welcome to Blackjack!", 0
+start_prompt db "Press any key to start...", 0
+
+
 .CODE
 asmMain PROC
+
+
+
     ; Your game logic for asmMain goes here
 
 asmMain ENDP
