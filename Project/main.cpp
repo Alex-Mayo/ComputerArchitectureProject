@@ -6,7 +6,7 @@ using namespace std;
 
 
 
-int main(){
-   asmMain();
-   return 0;
+int main() {
+	asmMain();
+	return 0;
 }
