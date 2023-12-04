@@ -1,25 +1,27 @@
 #include <iostream>
-#include <cstdlib>
-
 extern "C" {
-    void asmMain(); // Declare the assembly function
+    void display_message(const char* message);
+    char read_input();
 }
 
 using namespace std;
 
 int main() {
-    char playAgain;
+    display_message("Welcome to Blackjack!\n\n");
+    display_message("Press any key to start...\n");
 
-    do {
-        cout << "Welcome to Blackjack!\n";
-        asmMain(); // Call the assembly function
+    char userInput = read_input();
 
-        // Ask the user if they want to play again
-        cout << "Do you want to play again? (y/n): ";
-        cin >> playAgain;
 
-    } while (playAgain == 'y' || playAgain == 'Y');
-
-    cout << "Thanks for playing!\n";
     return 0;
+}
+
+void display_message(const char* message) {
+    cout << message;
+}
+
+char read_input() {
+    char input;
+    cin >> input;
+    return input;
 }
