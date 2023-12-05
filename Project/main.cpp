@@ -2,7 +2,7 @@
 extern "C" {
    void display_message(const char* message);
    char read_input();
-
+   void asmMain();
 
 }
 
@@ -13,7 +13,7 @@ int main() {
    display_message("Press any key to start...\n");
 
    char userInput = read_input();
-
+   asmMain();
 
    return 0;
 }
