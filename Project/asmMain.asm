@@ -24,6 +24,42 @@ card13 card <"Four of Clubs", 4>
 card14 card <"Four of Diamonds", 4>
 card15 card <"Four of Hearts", 4>
 card16 card <"Four of Spades", 4>
+card17 card <"Five of Clubs", 5>
+card18 card <"Five of Diamonds", 5>
+card19 card <"Five of Hearts", 5>
+card20 card <"Five of Spades", 5>
+card21 card <"Six of Clubs", 6>
+card22 card <"Six of Diamonds", 6>
+card23 card <"Six of Hearts", 6>
+card24 card <"Six of Spades", 6>
+card25 card <"Seven of Clubs", 7>
+card26 card <"Seven of Diamonds", 7>
+card27 card <"Seven of Hearts", 7>
+card28 card <"Seven of Spades", 7>
+card29 card <"Eight of Clubs", 8>
+card30 card <"Eight of Diamonds", 8>
+card31 card <"Eight of Hearts", 8>
+card32 card <"Eight of Spades", 8>
+card33 card <"Nine of Clubs", 9>
+card34 card <"Nine of Diamonds", 9>
+card35 card <"Nine of Hearts", 9>
+card36 card <"Nine of Spades", 9>
+card37 card <"Ten of Clubs", 10>
+card38 card <"Ten of Diamonds", 10>
+card39 card <"Ten of Hearts", 10>
+card40 card <"Ten of Spades", 10>
+card41 card <"Jack of Clubs", 10>
+card42 card <"Jack of Diamonds", 10>
+card43 card <"Jack of Hearts", 10>
+card44 card <"Jack of Spades", 10>
+card45 card <"Queen of Clubs", 10>
+card46 card <"Queen of Diamonds", 10>
+card47 card <"Queen of Hearts", 10>
+card48 card <"Queen of Spades", 10>
+card49 card <"King of Clubs", 10>
+card50 card <"King of Diamonds", 10>
+card51 card <"King of Hearts", 10>
+card52 card <"King of Spades", 10>
 ;End card creation
 
 playerScore DD ?       ; Double-word (4 bytes) variable to store player's score
@@ -46,19 +82,36 @@ newline db 10, 0         ; Newline character for formatting
 .CODE
 asmMain PROC
 
+   
+   ; Your game logic for asmMain goes here
 
-    ; Your game logic for asmMain goes here
-
+   ret
 asmMain ENDP
 
 
 
 _shuffle PROC ; A function that refills the deck
 
-   lea rax, deck
+   lea rsi, deck
+   ;mov each card into the deck array
    
 
+
+   ret
 _shuffle ENDP
+
+
+_deal PROC ; A function that deals one card to a certain player
+
+
+
+   ; random card selection
+   mov rax, LENGTHOF deck 
+   push rax
+   call randomNumber ; calls randomNumber from c++ file
+   pop rax
+
+_deal ENDP
 
 END
 
