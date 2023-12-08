@@ -6,7 +6,8 @@ extern "C" {
    char read_input();
    extern void asmMain();
    int randomNumber(int size);
-   void displayCard(string name);
+   void displayCard(const char* name);
+   int getInput();
 }
 
 using namespace std;
@@ -32,12 +33,29 @@ char read_input() {
    return input;
 }
 
-extern "C" int randomNumber(int size){
+int randomNumber(int size){
    int temp = rand() % size + 1;
    return temp;
 }
 
 //Display the cards in the current hand
-void displayCard(string name){
+void displayCard(const char* name){
    cout << name;
 }
+
+int getInput(){
+   string input;
+   cout << "(H)it or (S)tand\n";
+   cin >> input;
+   if(input == "H" || input == "h"){
+      return 1;
+   }
+   else if(input == "S" || input == "s"){
+      return 0;
+   }
+   else{
+      cout << "Invalid Input\n";
+      return getInput();
+   }
+}
+

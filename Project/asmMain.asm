@@ -1,9 +1,10 @@
+;name of function PROTO
+
 
 .data
 card STRUCT
    cName DB 128 DUP(?)       ; Allocate space for a name with a maximum of 128 characters
    number DB ?         ; A single-byte field to store the card number
-   ; suit DB ?           ; Allocate space for a suit
    secondNum DB ?      ; A single-byte field for an alternative number
 card ENDS
 
@@ -65,9 +66,9 @@ card52 card <"King of Spades", 10>
 playerScore DD ?       ; Double-word (4 bytes) variable to store player's score
 dealerScore DD ?       ; Double-word (4 bytes) variable to store dealer's score
 
-deck db 52 DUP(0) ; Array to represent the deck of cards, initialized with zeros
-player_hand db 10 DUP(0) ; Array to store player's hand, initialized with zeros
-dealer_hand db 10 DUP(0) ; Array to store dealer's hand, initialized with zeros
+deck card 52 DUP({}) ; Array to represent the deck of cards, initialized with zeros
+player_hand card 10 DUP({}) ; Array to store player's hand, initialized with zeros
+dealer_hand card 10 DUP({}) ; Array to store dealer's hand, initialized with zeros
 suits db "CDHS"         ; String containing the four suits
 ranks db "23456789XJQKA" ; String containing the ranks of the cards
 hidden_card db "??"     ; String representing a hidden card
@@ -81,9 +82,35 @@ newline db 10, 0         ; Newline character for formatting
 
 .CODE
 asmMain PROC
-
+   lea rdi, deck
+   lea rsi, player_hand
    
+   call _shuffle
+
    ; Your game logic for asmMain goes here
+   ; Player Turn
+   playerTurn:
+      mov rcx, LENGTHOF player_hand
+      cmp rcx, 0
+      jna playerInput
+      
+      displayLoop:
+         mov rbx, LENGTHOF player_hand
+         sub rbx, rcx
+         push [rdi + rbx].cName
+         call displayCard
+         loop displayLoop
+
+      playerInput:
+         call getInput
+         pop rax
+         cmp rax, 0 ; 0 = stand, 1 = hit
+         jna dealerTurn   
+           call _deal
+ 
+   ; Dealer Turn
+   dealerTurn:
+      
 
    ret
 asmMain ENDP
@@ -91,10 +118,9 @@ asmMain ENDP
 
 
 _shuffle PROC ; A function that refills the deck
-
-   lea rsi, deck
+  
    ;mov each card into the deck array
-   
+   mov rdi, card1.number   
 
 
    ret

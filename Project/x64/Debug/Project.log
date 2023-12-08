@@ -1,3 +1,7 @@
 ﻿  Assembling asmMain.asm...
-asmMain.asm(112): error A2006: undefined symbol : randomNumber
+asmMain.asm(99): error A2006: undefined symbol : cName
+asmMain.asm(100): error A2006: undefined symbol : displayCard
+asmMain.asm(104): error A2006: undefined symbol : getInput
+asmMain.asm(122): error A2022: instruction operands must be the same size
+asmMain.asm(136): error A2006: undefined symbol : randomNumber
 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: The command "ml64.exe /c /nologo /Zi /Fo"x64\Debug\asmMain.obj" /W3 /errorReport:prompt  /TaasmMain.asm" exited with code 1.
