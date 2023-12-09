@@ -1,7 +1,8 @@
 shuffle PROTO
 getDeckSize PROTO
 randomNumber PROTO
-readCard PROTO
+readPlayerCard PROTO
+readDealerCard PROTO
 
 .data
 
@@ -24,7 +25,7 @@ newline db 10, 0         ; Newline character for formatting
 asmMain PROC
 
    ; Your game logic for asmMain goes here
-   
+   call _gameStart
       
 
    ret
@@ -34,7 +35,6 @@ _gameStart PROC ; deal two cards to player and dealer
 
    shuffleCheck:
       call getDeckSize
-      pop rax
       cmp rax, 52
       jnbe noShuffle
       call shuffle
@@ -62,6 +62,7 @@ _gameStart ENDP
 _deal PROC
 
    call getDeckSize
+   push rax
    call randomNumber
    
 
@@ -71,26 +72,20 @@ _deal ENDP
 _getScore PROC
 
    mov cx, playerHandSize
-   lea dx, player
    playerLoop:
    mov bx, playerHandSize
    sub bx, cx
-      push dx
       push bx
-      call readCard
-      pop ax
+      call readPlayerCard
       add playerScore, ax
    loop playerLoop
 
-   lea dx, dealer
    mov cx, dealerHandSize
    dealerLoop:
       mov bx, dealerHandSize
       sub bx, cx
-      push dx
       push bx
-      call readCard
-      pop ax
+      call readDealerCard
       add dealerScore, ax
    loop dealerLoop
 

@@ -11,7 +11,8 @@ extern "C" {
    void displayCard(const char* name);
    void shuffle();
    int getDeckSize();
-   int readCard(int sel, char person);
+   int readPlayerCard(int val);
+   int readDealerCard(int val);
 }
 
 using namespace std;
@@ -63,13 +64,43 @@ void shuffle(){
    deck.clear();
    Card temp = Card("Ace of Spades", 11, 1);
    deck.push_back(temp);
+   temp = Card("Ace of Heart", 11, 1);
+   deck.push_back(temp);
+   temp = Card("Ace of Diamonds", 11, 1);
+   deck.push_back(temp);
+   temp = Card("Ace of Clubs", 11, 1);
+   deck.push_back(temp);
+   temp = Card("Two of Spades", 2);
+   deck.push_back(temp);
+   temp = Card("Two of Hearts", 2);
+   deck.push_back(temp);
+   temp = Card("Two of Diamonds", 2);
+   deck.push_back(temp);
+   temp = Card("Two of Clubs", 2);
+   deck.push_back(temp);
+   temp = Card("Three of Spades", 3);
+   deck.push_back(temp);
+   temp = Card("Three of Hearts", 3);
+   deck.push_back(temp);
+   temp = Card("Three of Diamonds", 3);
+   deck.push_back(temp);
+   temp = Card("Three of Clubs", 3);
+   deck.push_back(temp);
+   temp = Card("Four of Spades", 4);
+   deck.push_back(temp);
+   temp = Card("Four of Hearts", 4);
+   deck.push_back(temp);
+   
 }
 
-int readCard(int sel, char person){
-   if(person == 'p'){
-      return playerHand[sel].num;
-   }
-   else{
-      return dealerHand[sel].num;
-   }
+int readPlayerCard(int val){
+   return playerHand[val].num;
+}
+
+int readDealerCard(int val) {
+   return dealerHand[val].num;
+}
+
+void moveCard(int sel, char person){
+
 }
