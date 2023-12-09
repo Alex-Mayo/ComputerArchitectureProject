@@ -1,3 +1,2 @@
 ﻿  Assembling asmMain.asm...
-asmMain.asm(112): error A2006: undefined symbol : randomNumber
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: The command "ml64.exe /c /nologo /Zi /Fo"x64\Debug\asmMain.obj" /W3 /errorReport:prompt  /TaasmMain.asm" exited with code 1.
+  Project.vcxproj -> C:\Users\Alexander Mayo\Documents\Computer Architecture\Project\x64\Debug\Project.exe

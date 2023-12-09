@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <vector>
 #include <stdlib.h>
 #include <time.h>
 extern "C" {
@@ -6,17 +8,31 @@ extern "C" {
    char read_input();
    extern void asmMain();
    int randomNumber(int size);
-   void displayCard(string name);
+   void displayCard(const char* name);
+   void shuffle();
+   int getDeckSize();
 }
 
 using namespace std;
+
+class Card{
+   public:
+      Card(string cardName, int value){name = cardName; num = value;};
+      Card(string cardName, int value, int altValue){name = cardName; num = value; altNum = altValue;};
+      string name;
+      int num, altNum;
+};
+
+vector<Card> deck;
+vector<Card> playerHand;
+vector<Card> dealerHand;
 
 int main() {
    srand(time(NULL));
    display_message("Welcome to Blackjack!\n\n");
    display_message("Press any key to start...\n");
-
-   char userInput = read_input();
+   cin.ignore();
+   
    asmMain();
 
    return 0;
@@ -32,12 +48,18 @@ char read_input() {
    return input;
 }
 
-extern "C" int randomNumber(int size){
+int getDeckSize(){
+   return deck.size();
+}
+
+int randomNumber(int size){
    int temp = rand() % size + 1;
    return temp;
 }
 
-//Display the cards in the current hand
-void displayCard(string name){
-   cout << name;
+//Refill the deck with every card
+void shuffle(){
+   deck.clear();
+   Card temp = Card("Ace of Spades", 11, 1);
+   deck.push_back(temp);
 }
