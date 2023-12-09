@@ -61,21 +61,14 @@ _gameStart ENDP
 
 _dealPlayer PROC
 
-   call getDeckSize
-   push rax
    call randomNumber
-   mov rbx, rax
-   pop rax
-   push rbx
+   push rax
    call movePlayerCard
-
 
 _dealPlayer ENDP
 
 _dealDealer PROC
 
-   call getDeckSize
-   push rax
    call randomNumber
    push rax
    call moveDealerCard

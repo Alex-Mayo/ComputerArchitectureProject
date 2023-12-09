@@ -7,12 +7,12 @@ extern "C" {
    void display_message(const char* message);
    char read_input();
    extern void asmMain();
-   int randomNumber(int size);
+   int randomNumber();
    void shuffle();
    int getDeckSize();
    int readPlayerCard(int val);
    int readDealerCard(int val);
-   void movePlayerCard(int sel);
+   int movePlayerCard(int sel);
    void moveDealerCard(int sel);
 }
 
@@ -55,8 +55,9 @@ int getDeckSize(){
    return deck.size();
 }
 
-int randomNumber(int size){
-   int temp = rand() % size + 1;
+int randomNumber(){
+   int temp;
+   temp = rand() % getDeckSize() + 1;
    return temp;
 }
 
@@ -177,10 +178,11 @@ int readDealerCard(int val) {
    return dealerHand[val].num;
 }
 
-void movePlayerCard(int sel){
+int movePlayerCard(int sel){
    sel = sel - 1;
    playerHand.push_back(deck[sel]);
    deck.erase(deck.begin() + sel);
+   return 0;
 }
 
 void moveDealerCard(int sel){
