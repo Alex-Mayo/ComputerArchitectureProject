@@ -8,11 +8,12 @@ extern "C" {
    char read_input();
    extern void asmMain();
    int randomNumber(int size);
-   void displayCard(const char* name);
    void shuffle();
    int getDeckSize();
    int readPlayerCard(int val);
    int readDealerCard(int val);
+   void movePlayerCard(int sel);
+   void moveDealerCard(int sel);
 }
 
 using namespace std;
@@ -176,6 +177,14 @@ int readDealerCard(int val) {
    return dealerHand[val].num;
 }
 
-void moveCard(int sel, char person){
+void movePlayerCard(int sel){
+   sel = sel - 1;
+   playerHand.push_back(deck[sel]);
+   deck.erase(deck.begin() + sel);
+}
 
+void moveDealerCard(int sel){
+   sel = sel - 1;
+   dealerHand.push_back(deck[sel]);
+   deck.erase(deck.begin() + sel);
 }

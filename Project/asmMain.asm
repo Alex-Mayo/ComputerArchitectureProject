@@ -3,6 +3,8 @@ getDeckSize PROTO
 randomNumber PROTO
 readPlayerCard PROTO
 readDealerCard PROTO
+movePlayerCard PROTO
+moveDealerCard PROTO
 
 .data
 
@@ -45,29 +47,41 @@ _gameStart PROC ; deal two cards to player and dealer
    mov playerHandSize, 0
    mov dealerHandSize, 0 
 
-   lea rsi, player
-   call _deal
-   call _deal
+   call _dealPlayer
+   call _dealPlayer
    add playerHandSize, 2
 
-   lea rsi, dealer
-   call _deal
-   call _deal
+   call _dealDealer
+   call _dealDealer
    add dealerHandSize, 2
 
    call _getScore
 
 _gameStart ENDP
 
-_deal PROC
+_dealPlayer PROC
 
    call getDeckSize
    push rax
    call randomNumber
-   
+   mov rbx, rax
+   pop rax
+   push rbx
+   call movePlayerCard
 
 
-_deal ENDP
+_dealPlayer ENDP
+
+_dealDealer PROC
+
+   call getDeckSize
+   push rax
+   call randomNumber
+   push rax
+   call moveDealerCard
+
+
+_dealDealer ENDP
 
 _getScore PROC
 
