@@ -1,16 +1,17 @@
 shuffle PROTO
 getDeckSize PROTO
 randomNumber PROTO
+readCard PROTO
 
 .data
 
-player db "player",0
-dealer db "dealer",0
+player word 'p'
+dealer word 'd'
 
-playerHandSize DD 0
-dealerHandSize DD 0
-playerScore DD ?       ; Double-word (4 bytes) variable to store player's score
-dealerScore DD ?       ; Double-word (4 bytes) variable to store dealer's score
+playerHandSize word 0
+dealerHandSize word 0
+playerScore word 0      ; Double-word (4 bytes) variable to store player's score
+dealerScore word 0     ; Double-word (4 bytes) variable to store dealer's score
 
 player_prompt db "Enter 'h' to hit or 's' to stand: ", 0 ; Prompt for player input
 input_format db "%c", 0  ; Format string for reading a character input
@@ -39,13 +40,17 @@ _gameStart PROC ; deal two cards to player and dealer
       call shuffle
 
    noShuffle:
-   
-   lea si, player
+   mov playerScore, 0
+   mov dealerScore, 0
+   mov playerHandSize, 0
+   mov dealerHandSize, 0 
+
+   lea rsi, player
    call _deal
    call _deal
    add playerHandSize, 2
 
-   lea si, dealer
+   lea rsi, dealer
    call _deal
    call _deal
    add dealerHandSize, 2
@@ -65,6 +70,16 @@ _deal ENDP
 
 _getScore PROC
 
+   mov cx, playerHandSize
+   playerLoop:
+   mov bx, playerHandSize
+   sub bx, cx
+      push si
+      push bx
+      call readCard
+      pop ax
+      add playerScore, ax
+   loop playerLoop
 
 _getScore ENDP
 

@@ -11,6 +11,7 @@ extern "C" {
    void displayCard(const char* name);
    void shuffle();
    int getDeckSize();
+   int readCard(int sel, char person);
 }
 
 using namespace std;
@@ -62,4 +63,13 @@ void shuffle(){
    deck.clear();
    Card temp = Card("Ace of Spades", 11, 1);
    deck.push_back(temp);
+}
+
+int readCard(int sel, char person){
+   if(person == 'p'){
+      return playerHand[sel].num;
+   }
+   else{
+      return dealerHand[sel].num;
+   }
 }
