@@ -71,15 +71,28 @@ _deal ENDP
 _getScore PROC
 
    mov cx, playerHandSize
+   lea dx, player
    playerLoop:
    mov bx, playerHandSize
    sub bx, cx
-      push si
+      push dx
       push bx
       call readCard
       pop ax
       add playerScore, ax
    loop playerLoop
+
+   lea dx, dealer
+   mov cx, dealerHandSize
+   dealerLoop:
+      mov bx, dealerHandSize
+      sub bx, cx
+      push dx
+      push bx
+      call readCard
+      pop ax
+      add dealerScore, ax
+   loop dealerLoop
 
 _getScore ENDP
 
