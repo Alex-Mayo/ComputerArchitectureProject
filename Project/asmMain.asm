@@ -62,27 +62,21 @@ _gameStart PROC ; deal two cards to player and dealer
 _gameStart ENDP
 
 _dealPlayer PROC
-
-   push rsp
    call randomNumber
    mov rcx, rax
-   call movePlayerCard ; Problem with call stack starts here
-                       ; If no push rsp, return to _asmMain not _gameStart
-                       ; If no ret, continue to _dealDealer
-                       ; If pop is added, return to _asmMain not _gameStart
+   call movePlayerCard
+   add rsp, 8  ; Adjust the stack pointer to clean up the stack after the call
    ret
-
 _dealPlayer ENDP
 
 _dealDealer PROC
-
-   push rsp
    call randomNumber
    mov rcx, rax
    call moveDealerCard
+   add rsp, 8  ; Adjust the stack pointer to clean up the stack after the call
    ret
-
 _dealDealer ENDP
+
 
 _getScore PROC
 
