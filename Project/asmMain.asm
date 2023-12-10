@@ -90,18 +90,22 @@ _getScore PROC
    playerLoop:
    mov bx, playerHandSize
    sub bx, cx
-      push bx
+      push cx ; Save cx (iterator count)
+      mov cx, bx ; Move bx to cx to pass value to function readPlayerCard
       call readPlayerCard
       add playerScore, ax
+      pop cx ; Restore cx (iterator count)
    loop playerLoop
 
    mov cx, dealerHandSize
    dealerLoop:
       mov bx, dealerHandSize
       sub bx, cx
-      push bx
+      push cx
+      mov cx, bx
       call readDealerCard
       add dealerScore, ax
+      pop cx
    loop dealerLoop
    ret
 
