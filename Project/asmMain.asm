@@ -5,6 +5,8 @@ readPlayerCard PROTO
 readDealerCard PROTO
 movePlayerCard PROTO
 moveDealerCard PROTO
+extern ReadConsoleA : PROC
+includelib user32.lib
 
 .data
 
@@ -16,7 +18,6 @@ dealerHandSize word 0
 playerScore word 0      ; Word (2 bytes) variable to store player's score
 dealerScore word 0     ; Word (2 bytes) variable to store dealer's score
 
-iteratorSave word ?
 player_prompt db "Enter 'h' to hit or 's' to stand: ", 0 ; Prompt for player input
 input_format db "%c", 0  ; Format string for reading a character input
 player_input db 0        ; Variable to store player's input
