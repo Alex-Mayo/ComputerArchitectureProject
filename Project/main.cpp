@@ -12,7 +12,7 @@ extern "C" {
    int getDeckSize();
    int readPlayerCard(int val);
    int readDealerCard(int val);
-   int movePlayerCard(int sel);
+   void movePlayerCard(int sel);
    void moveDealerCard(int sel);
 }
 
@@ -178,11 +178,11 @@ int readDealerCard(int val) {
    return dealerHand[val].num;
 }
 
-int movePlayerCard(int sel){
+void movePlayerCard(int sel){
    sel = sel - 1;
    playerHand.push_back(deck[sel]);
    deck.erase(deck.begin() + sel);
-   return 0;
+   return;
 }
 
 void moveDealerCard(int sel){

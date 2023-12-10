@@ -48,6 +48,7 @@ _gameStart PROC ; deal two cards to player and dealer
    mov dealerHandSize, 0 
 
    call _dealPlayer
+   pop rsp
    call _dealPlayer
    add playerHandSize, 2
 
@@ -56,23 +57,30 @@ _gameStart PROC ; deal two cards to player and dealer
    add dealerHandSize, 2
 
    call _getScore
+   ret
 
 _gameStart ENDP
 
 _dealPlayer PROC
 
+   push rsp
    call randomNumber
-   push rax
-   call movePlayerCard
+   mov rcx, rax
+   call movePlayerCard ; Problem with call stack starts here
+                       ; If no push rsp, return to _asmMain not _gameStart
+                       ; If no ret, continue to _dealDealer
+                       ; If pop is added, return to _asmMain not _gameStart
+   ret
 
 _dealPlayer ENDP
 
 _dealDealer PROC
 
+   push rsp
    call randomNumber
-   push rax
+   mov rcx, rax
    call moveDealerCard
-
+   ret
 
 _dealDealer ENDP
 
@@ -95,6 +103,7 @@ _getScore PROC
       call readDealerCard
       add dealerScore, ax
    loop dealerLoop
+   ret
 
 _getScore ENDP
 
