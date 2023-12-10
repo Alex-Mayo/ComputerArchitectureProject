@@ -190,3 +190,4 @@ void moveDealerCard(int sel){
    dealerHand.push_back(deck[sel]);
    deck.erase(deck.begin() + sel);
 }
+
