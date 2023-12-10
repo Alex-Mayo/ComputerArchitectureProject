@@ -26,6 +26,8 @@ newline db 10, 0         ; Newline character for formatting
 
 input_buffer BYTE 10 DUP (?) ; Buffer to store user input
 
+iteratorSave word ?
+
 .CODE
 getPlayerInput PROC
     lea rdx, player_prompt  ; Load the address of the player prompt
@@ -111,26 +113,33 @@ _dealDealer ENDP
 
 _getScore PROC
 
-   mov cx, playerHandSize
+   mov playerScore, 0
+   mov dealerScore, 0
+
+   movzx rcx, playerHandSize
    playerLoop:
-   mov bx, playerHandSize
-   sub bx, cx
-      push cx ; Save cx (iterator count)
-      mov cx, bx ; Move bx to cx to pass value to function readPlayerCard
+      movzx rbx, playerHandSize
+      sub rbx, rcx
+      mov iteratorSave, cx ; Save cx (iterator count) in variable
+      mov rcx, rbx ; Move rbx to rcx to pass value to function readPlayerCard
+      push rsp
       call readPlayerCard
+      add rsp, 8
       add playerScore, ax
-      pop cx ; Restore cx (iterator count)
+      movzx rcx, iteratorSave ; return the original cx value saved in iteratorSave
    loop playerLoop
 
-   mov cx, dealerHandSize
+   movzx rcx, dealerHandSize
    dealerLoop:
-      mov bx, dealerHandSize
-      sub bx, cx
-      push cx
-      mov cx, bx
+      movzx rbx, dealerHandSize
+      sub rbx, rcx
+      mov iteratorSave, cx
+      mov rcx, rbx
+      push rsp
       call readDealerCard
+      add rsp, 8
       add dealerScore, ax
-      pop cx
+      movzx rcx, iteratorSave
    loop dealerLoop
    ret
 
