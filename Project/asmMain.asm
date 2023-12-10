@@ -13,15 +13,10 @@ dealer word 'd'
 
 playerHandSize word 0
 dealerHandSize word 0
-playerScore word 0      ; Double-word (4 bytes) variable to store player's score
-dealerScore word 0     ; Double-word (4 bytes) variable to store dealer's score
+playerScore word 0      ; Word (2 bytes) variable to store player's score
+dealerScore word 0     ; Word (2 bytes) variable to store dealer's score
 
-player_prompt db "Enter 'h' to hit or 's' to stand: ", 0 ; Prompt for player input
-input_format db "%c", 0  ; Format string for reading a character input
-player_input db 0        ; Variable to store player's input
-
-newline db 10, 0         ; Newline character for formatting
-
+iteratorSave word ?
 
 .CODE
 asmMain PROC
@@ -85,26 +80,33 @@ _dealDealer ENDP
 
 _getScore PROC
 
-   mov cx, playerHandSize
+   mov playerScore, 0
+   mov dealerScore, 0
+
+   movzx rcx, playerHandSize
    playerLoop:
-   mov bx, playerHandSize
-   sub bx, cx
-      push cx ; Save cx (iterator count)
-      mov cx, bx ; Move bx to cx to pass value to function readPlayerCard
+      movzx rbx, playerHandSize
+      sub rbx, rcx
+      mov iteratorSave, cx ; Save cx (iterator count) in variable
+      mov rcx, rbx ; Move rbx to rcx to pass value to function readPlayerCard
+      push rsp
       call readPlayerCard
+      add rsp, 8
       add playerScore, ax
-      pop cx ; Restore cx (iterator count)
+      movzx rcx, iteratorSave ; return the original cx value saved in iteratorSave
    loop playerLoop
 
-   mov cx, dealerHandSize
+   movzx rcx, dealerHandSize
    dealerLoop:
-      mov bx, dealerHandSize
-      sub bx, cx
-      push cx
-      mov cx, bx
+      movzx rbx, dealerHandSize
+      sub rbx, rcx
+      mov iteratorSave, cx
+      mov rcx, rbx
+      push rsp
       call readDealerCard
+      add rsp, 8
       add dealerScore, ax
-      pop cx
+      movzx rcx, iteratorSave
    loop dealerLoop
    ret
 
