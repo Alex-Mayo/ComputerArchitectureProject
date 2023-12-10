@@ -5,7 +5,7 @@ readPlayerCard PROTO
 readDealerCard PROTO
 movePlayerCard PROTO
 moveDealerCard PROTO
-extrn ReadConsoleA : PROC
+extern ReadConsoleA : PROC
 includelib user32.lib
 
 .data
@@ -15,8 +15,8 @@ dealer word 'd'
 
 playerHandSize word 0
 dealerHandSize word 0
-playerScore word 0      ; Double-word (4 bytes) variable to store player's score
-dealerScore word 0     ; Double-word (4 bytes) variable to store dealer's score
+playerScore word 0      ; Word (2 bytes) variable to store player's score
+dealerScore word 0     ; Word (2 bytes) variable to store dealer's score
 
 player_prompt db "Enter 'h' to hit or 's' to stand: ", 0 ; Prompt for player input
 input_format db "%c", 0  ; Format string for reading a character input
@@ -59,26 +59,23 @@ _gameStart PROC ; deal two cards to player and dealer
         mov playerHandSize, 0
         mov dealerHandSize, 0 
 
-        call _dealPlayer
-        call _dealPlayer
-        add playerHandSize, 2
+   call _dealPlayer
+   pop rsp
+   call _dealPlayer
+   add playerHandSize, 2
 
         call _dealDealer
         call _dealDealer
         add dealerHandSize, 2
 
-        call _getScore
+   call _getScore
+   ret
 
     playerInputLoop:
         ; Display player prompt and get input
         call getPlayerInput
 
-        ; Check the input (assuming 'h' for hit, 's' for stand)
-        cmp al, 'h'
-        je hit
-        cmp al, 's'
-        je stand
-        jmp playerInputLoop ; Invalid input, loop again
+_dealPlayer PROC
 
     hit:
         ; Handle player hit logic (call a function, update scores, etc.)
@@ -97,8 +94,10 @@ _gameStart ENDP
 _dealPlayer PROC
    call randomNumber
    mov rcx, rax
-   call movePlayerCard
-   add rsp, 8  ; Adjust the stack pointer to clean up the stack after the call
+   call movePlayerCard ; Problem with call stack starts here
+                       ; If no push rsp, return to _asmMain not _gameStart
+                       ; If no ret, continue to _dealDealer
+                       ; If pop is added, return to _asmMain not _gameStart
    ret
 _dealPlayer ENDP
 
@@ -106,7 +105,6 @@ _dealDealer PROC
    call randomNumber
    mov rcx, rax
    call moveDealerCard
-   add rsp, 8  ; Adjust the stack pointer to clean up the stack after the call
    ret
 _dealDealer ENDP
 
@@ -129,7 +127,7 @@ _getScore PROC
       movzx rcx, iteratorSave ; return the original cx value saved in iteratorSave
    loop playerLoop
 
-   movzx rcx, dealerHandSize
+   mov cx, dealerHandSize
    dealerLoop:
       movzx rbx, dealerHandSize
       sub rbx, rcx
