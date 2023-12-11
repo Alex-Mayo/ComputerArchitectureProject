@@ -14,7 +14,17 @@ extern "C" {
    int readDealerCard(int val);
    void movePlayerCard(int sel);
    void moveDealerCard(int sel);
+   int playerAceSwap();
+   int dealerAceSwap();
+   void displayGameState();
+   int hitCheck();
+   extern void _getScore();
+   extern int _getPlayerScore();
+   extern int _getDealerScore();
+   void endGameMessage(int num);
 }
+
+
 
 using namespace std;
 
@@ -44,68 +54,30 @@ void displayGameState() {
     // Display player's cards
     cout << "Player's Hand: ";
     for (const Card& card : playerHand) {
-        cout << card.name << " ";
+        cout << card.name << ", ";
     }
     cout << endl;
 
     // Display dealer's cards
     cout << "Dealer's Hand: ";
     for (const Card& card : dealerHand) {
-        cout << card.name << " ";
+        cout << card.name << ", ";
     }
     cout << endl;
 
     // Display scores
-    cout << "Player Score: " << calculateScore(playerHand) << endl;
-    cout << "Dealer Score: " << calculateScore(dealerHand) << endl;
+    cout << "Player Score: " << _getPlayerScore() << endl;
+    cout << "Dealer Score: " << _getDealerScore() << endl;
 }
 
 int main() {
    srand(time(NULL));
    display_message("Welcome to Blackjack!\n\n");
    display_message("Press any key to start...\n");
-   cin.get();
+   cin.ignore();
 
-   // Initialize the game state
-   shuffle();
-   movePlayerCard(1);
-   movePlayerCard(2);
-   moveDealerCard(1);
-   moveDealerCard(2);
-
-   // Display the initial game state
-   displayGameState();
-
-   // Enter the game loop (you may want to replace this with your actual game logic)
-   while (true) {
-       // Display the game state before each turn
-       displayGameState();
-
-       // Read player input and perform game actions
-       char userInput = read_input();
-       if (userInput == 'q') {
-           break;  // Exit the loop if the user presses 'q'
-       }
-       else if (userInput == 'h') {
-           // Handle player hit logic
-           movePlayerCard(1);  // For simplicity, always add one card when hitting
-       }
-       else if (userInput == 's') {
-           // Handle player stand logic
-           // Implement the logic for what happens when the player stands
-           // For now, let's just break out of the loop
-           break;
-       }
-
-       // Update game state after player's action
-       // (You may want to add more game logic here)
-
-       // Check if the game is over based on your conditions
-       // (You may want to add more end-game logic here)
-   }
    
    asmMain();
-
    return 0;
 }
 
@@ -260,3 +232,48 @@ void moveDealerCard(int sel){
    deck.erase(deck.begin() + sel);
 }
 
+int playerAceSwap(){
+   for(int i = 0; i < playerHand.size(); i++){
+      if(playerHand[i].num == 11){
+         playerHand[i].num = playerHand[i].altNum;
+         playerHand[i].num = 11;
+         return 1;
+      }
+   }
+   return 0;
+}
+
+int dealerAceSwap(){
+   for(int i = 0; i < dealerHand.size(); i++){
+      if(dealerHand[i].num == 11){
+         dealerHand[i].num = dealerHand[i].altNum;
+         dealerHand[i].altNum = 11;
+         return 1;
+      }
+   }
+   return 0;
+}
+
+int hitCheck(){
+   cout << "(h)it or (s)tand\n";
+   char temp = read_input();
+   if(temp == 'h' || temp == 'H'){
+      return 1;
+   }
+   else if(temp == 's' || temp == 'S'){
+      return 0;
+   }
+   else{
+      return 0;
+   }
+}
+
+void endGameMessage(int num){
+   switch (num){
+      case 1: cout << "You Busted! Better luck next time!\n"; break;
+      case 2: cout << "The Dealer Busted! You WIN!\n"; break;
+      case 3: cout << "The Dealer scored higher than you! Better luck next time!\n"; break;
+      default: return;
+   }
+   return;
+}

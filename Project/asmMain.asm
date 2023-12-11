@@ -6,8 +6,11 @@ readPlayerCard PROTO
 readDealerCard PROTO
 movePlayerCard PROTO
 moveDealerCard PROTO
-extern ReadConsoleA : PROC
-includelib user32.lib
+playerAceSwap PROTO
+dealerAceSwap PROTO
+displayGameState PROTO
+hitCheck PROTO
+endGameMessage PROTO
 
 .data
 ; Constants and variables for player and dealer identifiers, hand sizes, and scores
@@ -18,17 +21,6 @@ dealerHandSize word 0
 playerScore word 0      ; Word (2 bytes) variable to store player's score
 dealerScore word 0     ; Word (2 bytes) variable to store dealer's score
 
-; Strings for player input prompt, input format, newline, and prompts for various game outcomes
-player_prompt db "Enter 'h' to hit or 's' to stand: ", 0 ; Prompt for player input
-input_format db "%c", 0  ; Format string for reading a character input
-player_input db 0        ; Variable to store player's input
-newline db 10, 0         ; Newline character for formatting
-input_buffer BYTE 10 DUP (?) ; Buffer to store user input
-playerBustPrompt db "Bust! You lose.", 0 ; Null-terminated string for player bust prompt
-dealerBustPrompt db "Dealer bust! Player wins.", 0 ; Null-terminated string for dealer bust prompt
-playerScorePrompt db "Player score: ", 0 ; Null-terminated string for player score prompt
-dealerScorePrompt db "Dealer score: ", 0 ; Null-terminated string for dealer score prompt
-
 ; Variable to save the iterator count during score calculation
 iteratorSave word ?
 
@@ -37,6 +29,9 @@ iteratorSave word ?
 asmMain PROC
    ; Your game logic for asmMain goes here
    call _gameStart
+   call _playerTurn
+   call _dealerTurn
+   call _gameEnd
    ret
 asmMain ENDP
 
@@ -67,176 +62,23 @@ _gameStart PROC ; deal two cards to player and dealer
    ; Calculate initial scores
    call _getScore
    
-   ; Enter the player input loop
-   playerInputLoop:
-        ; Display player prompt and get input
-        call getPlayerInput
-        ; Check the input (assuming 'h' for hit, 's' for stand)
-        cmp al, 'h'
-        je hit
-        cmp al, 's'
-        je stand
-        jmp playerInputLoop ; Invalid input, loop again
-
-    hit:
-        ; Handle player hit logic
-        call _playerHit
-        jmp playerInputLoop ; After hitting, go back to the player input loop
-
-    stand:
-        ; Handle player stand logic
-        call _playerStand
-        ; After standing, proceed to the dealer's turn (you'll implement this later)
-        jmp dealerTurn
-
-    afterPlayerTurn:
-        ; Display current game state or check for win/loss conditions
-        ; ...
-
-        ; If the game is not over, proceed to the dealer's turn
-        jmp dealerTurn
-
    ret
-_playerHit PROC
-  ; Deal a card to the player
-   call _dealPlayer
-   add playerHandSize, 1
-
-   ; Calculate player score
-   call _getScore
-
-   ; Check if the player busts (score over 21)
-   cmp playerScore, 21
-   jg playerBustMessage  ; Jump if playerScore > 21
-
-   ; Player did not bust, continue
-   ret
-
-playerBustMessage:
-   ; Display a message for player bust
-   lea rdx, playerBustPrompt  ; Load the address of the player bust prompt
-   call printString  ; Implement a function to print a string
-   ; You might want to handle other things here, like ending the game or resetting the hands
-   jmp afterPlayerTurn ; Jump to the end of the player's turn logic
-
-    afterPlayerTurn:
-       ; Display current game state
-      lea rdx, newline  ; Load the address of the newline character
-      call printString  ; Print a newline for better formatting
-
-      ; Display player score
-      lea rdx, playerScorePrompt  ; Load the address of the player score prompt
-      call printString  ; Print a string
-      movzx eax, playerScore ; Load player's score into eax
-      ;call printNumber  ; Print the player's score
-
-      ; Display dealer score
-      lea rdx, dealerScorePrompt  ; Load the address of the dealer score prompt
-      call printString  ; Print a string
-      movzx eax, dealerScore ; Load dealer's score into eax
-      ;call printNumber  ; Print the dealer's score
-
-      ; Check for win/loss conditions or other game logic
-      ; (You can replace this comment with your specific logic)
-
-      ; If the game is not over, proceed to the dealer's turn
-      jmp dealerTurn
-
-_playerHit ENDP
-
-printString PROC
-    ; Implementation to print a null-terminated string
-    ; You need to implement this procedure based on your environment (DOS, Windows, etc.)
-    ; It could involve system calls or API calls to display text to the user.
-    ret
-printString ENDP
-
-_playerStand PROC
-   ; Handle player stand logic (if needed)
-   ; ...
-
-   ret
-_playerStand ENDP
-
-dealerTurn PROC
-    ; Implement the logic for the dealer's turn here
-    dealerLoop:
-        ; Draw a card for the dealer
-        call _dealDealer
-        add dealerHandSize, 1
-
-        ; Calculate dealer score
-        call _getScore
-
-        ; Check for bust
-        cmp dealerScore, 21
-        jg dealerBustMessage ; Jump if dealerScore > 21
-
-        ; Check if the dealer has a soft 17 (Ace and 6)
-        cmp dealerScore, 17
-        je checkSoft17
-
-        ; Check if the dealer's total is at least 17
-        cmp dealerScore, 17
-        jl dealerLoop ; If not, draw another card
-        jmp afterDealerTurn ; If total is 17 or higher, exit the loop
-
-    checkSoft17:
-        ; Implement logic for a soft 17 (Ace and 6)
-        ; You may need to decide whether to count the Ace as 1 or 11
-        ; Additional logic goes here
-
-    ; After the dealer's turn is complete, compare scores and determine the winner
-    ; You may also want to handle other game outcomes (e.g., tie, blackjack)
-    ; ...
-
-    ret
-
-    dealerBustMessage:
-       ; Display a message for dealer bust
-        ;lea rdx, dealerBustPrompt ; Load the address of the dealer bust prompt
-        call printString ; Implement a function to print a string
-        ; You might want to handle other things here, like ending the game or resetting the hands
-        jmp afterDealerTurn ; Jump to the end of the dealer's turn logic
-
-
-    afterDealerTurn:
-        ; Display current game state
-        lea rdx, newline ; Load the address of the newline character
-        call printString ; Print a newline for better formatting
-
-        ; Display player score
-        ;lea rdx, playerScorePrompt ; Load the address of the player score prompt
-        call printString ; Print a string
-        movzx eax, playerScore ; Load player's score into eax
-        ;call printNumber ; Print the player's score
-
-        ; Display dealer score
-        ;lea rdx, dealerScorePrompt ; Load the address of the dealer score prompt
-        call printString ; Print a string
-        movzx eax, dealerScore ; Load dealer's score into eax
-        ;call printNumber ; Print the dealer's score
-
-        ; Check for win/loss conditions or other game logic
-        ; (You can replace this comment with your specific logic)
-
-        ; If the game is not over, you may want to return to a higher-level game logic
-        ; ...
-
-    ret
-dealerTurn ENDP
-
 _gameStart ENDP
 
+_getPlayerScore PROC
 
-getPlayerInput PROC
-    lea rdx, player_prompt  ; Load the address of the player prompt
-    lea rcx, input_buffer   ; Load the address of the input buffer
-    mov r8, 10              ; Maximum number of characters to read
-    call ReadConsoleA       ; Call ReadConsoleA to read a character input
-    movzx eax, byte ptr [input_buffer] ; Load the character input into eax
-    ret
-getPlayerInput ENDP
+   movzx rax, playerScore
+   ret
+
+_getPlayerScore ENDP
+
+_getDealerScore PROC
+
+   movzx rax, dealerScore
+   ret
+
+_getDealerScore ENDP
+
 
 _dealPlayer PROC
 
@@ -262,10 +104,10 @@ _dealDealer ENDP
 
 _getScore PROC
    ; Calculate scores for both player and dealer hands
+
+   playerScoreCount:
+
    mov playerScore, 0
-   mov dealerScore, 0
-   
-   ; Calculate player hand score
    movzx rcx, playerHandSize
    playerLoop:
       movzx rbx, playerHandSize
@@ -278,8 +120,13 @@ _getScore PROC
       add playerScore, ax
       movzx rcx, iteratorSave ; return the original cx value saved in iteratorSave
    loop playerLoop
+   cmp playerScore, 21
+   jnbe playerAceCheck
 
    ; Calculate dealer hand score
+   dealerScoreCount:
+
+   mov dealerScore, 0
    movzx rcx, dealerHandSize
    dealerLoop:
       movzx rbx, dealerHandSize
@@ -292,7 +139,131 @@ _getScore PROC
       add dealerScore, ax
       movzx rcx, iteratorSave
    loop dealerLoop
-   ret
+   cmp dealerScore, 21
+   jnbe dealerAceCheck
+
+
+   endOfFunction:
+      ret
+
+   playerAceCheck:
+      call playerAceSwap
+      cmp rax, 1
+      je playerScoreCount ; if value changed, redo playerScoreCount
+      jmp dealerScoreCount
+
+   dealerAceCheck:
+      call dealerAceSwap
+      cmp rax, 1
+      je dealerScoreCount ; if value changed, redo dealerScoreCount
+      jmp endOfFunction
 
 _getScore ENDP
+
+
+_playerTurn PROC
+
+   hitLoop:
+
+      push rsp
+      call displayGameState
+      add rsp, 8
+
+      push rsp
+      call hitCheck
+      add rsp, 8
+
+      cmp rax, 1 ; Checks if hit (1) was selected by the player
+      jne stand ; jumps to stand if not equal to 1
+
+
+      call _dealPlayer
+
+      add playerHandSize, 1
+      call _getScore
+
+      cmp playerScore, 21
+      ja bust
+      
+      jmp hitLoop
+      
+   stand:
+      ret
+      
+   bust:
+      push rsp
+      call displayGameState
+      add rsp, 8
+
+      ret
+
+_playerTurn ENDP
+
+
+_dealerTurn PROC
+
+   mov ax, playerScore
+   cmp dealerScore, ax
+   jnbe stand
+   
+   hitLoop:   
+      call _dealDealer
+      add dealerHandSize, 1
+
+      call _getScore
+
+      cmp dealerScore, 21
+      jnbe bust ; if score is over 21, bust
+
+      mov ax, playerScore
+      cmp dealerScore, ax 
+      jnbe stand ; if score is above playerScore, stand
+
+      jmp hitLoop ; otherwise hit until one of the conditions is met
+
+   stand:
+      push rsp
+      call displayGameState
+      add rsp, 8
+      ret
+
+   bust:
+      push rsp
+      call displayGameState
+      add rsp, 8
+      ret
+
+_dealerTurn ENDP
+
+_gameEnd PROC
+
+   cmp playerScore, 21
+   ja playerBust
+
+   cmp dealerScore, 21
+   ja dealerBust
+   
+   mov rcx, 3
+   push rsp
+   call endGameMessage
+   add rsp, 8
+   ret
+
+
+   playerBust:
+      mov rcx, 1
+      push rsp
+      call endGameMessage
+      add rsp, 8
+      ret
+
+   dealerBust:
+      mov rcx, 2
+      push rsp
+      call endGameMessage
+      add rsp, 8
+      ret
+
+_gameEnd ENDP
+
 END
