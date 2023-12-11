@@ -11,6 +11,7 @@ dealerAceSwap PROTO
 displayGameState PROTO
 hitCheck PROTO
 endGameMessage PROTO
+rerunCheck PROTO
 
 .data
 ; Constants and variables for player and dealer identifiers, hand sizes, and scores
@@ -28,10 +29,21 @@ iteratorSave word ?
 .CODE
 asmMain PROC
    ; Your game logic for asmMain goes here
+   
+   gameStart:
+
    call _gameStart
    call _playerTurn
    call _dealerTurn
    call _gameEnd
+
+   push rsp
+   call rerunCheck
+   add rsp, 8
+   
+   cmp rax, 1
+   je gameStart
+
    ret
 asmMain ENDP
 

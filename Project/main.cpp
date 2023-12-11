@@ -22,6 +22,7 @@ extern "C" {
    extern int _getPlayerScore();
    extern int _getDealerScore();
    void endGameMessage(int num);
+   int rerunCheck();
 }
 
 
@@ -41,17 +42,9 @@ vector<Card> deck;
 vector<Card> playerHand;
 vector<Card> dealerHand;
 
-int calculateScore(const vector<Card>& hand) {
-    int score = 0;
-    for (const Card& card : hand) {
-        score += card.num;
-    }
-    return score;
-}
-
-
 void displayGameState() {
     // Display player's cards
+    cout << "--------------------------------------------------------------------------------------------------" << endl;
     cout << "Player's Hand: ";
     for (const Card& card : playerHand) {
         cout << card.name << ", ";
@@ -68,12 +61,13 @@ void displayGameState() {
     // Display scores
     cout << "Player Score: " << _getPlayerScore() << endl;
     cout << "Dealer Score: " << _getDealerScore() << endl;
+    cout << endl;
 }
 
 int main() {
    srand(time(NULL));
    display_message("Welcome to Blackjack!\n\n");
-   display_message("Press any key to start...\n");
+   display_message("Press enter to start...\n");
    cin.ignore();
 
    
@@ -84,7 +78,6 @@ int main() {
 void display_message(const char* message) {
    cout << message;
 }
-
 
 char read_input() {
    char input;
@@ -107,107 +100,159 @@ void shuffle(){
    deck.clear();
    Card temp = Card("Ace of Spades", 11, 1);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Ace of Heart", 11, 1);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Ace of Diamonds", 11, 1);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Ace of Clubs", 11, 1);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Two of Spades", 2);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Two of Hearts", 2);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Two of Diamonds", 2);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Two of Clubs", 2);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Three of Spades", 3);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Three of Hearts", 3);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Three of Diamonds", 3);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Three of Clubs", 3);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Four of Spades", 4);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Four of Hearts", 4);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Four of Diamonds", 4);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Four of Clubs", 4);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Five of Spades", 5);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Five of Hearts", 5);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Five of Diamonds", 5);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Five of Clubs", 5);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Six of Spades", 6);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Six of Hearts", 6);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Six of Diamonds", 6);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Six of Clubs", 6);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Seven of Spades", 7);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Seven of Hearts", 7);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Seven of Diamonds", 7);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Seven of Clubs", 7);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Eight of Spades", 8);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Eight of Hearts", 8);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Eight of Diamonds", 8);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Eight of Clubs", 8);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Nine of Spades", 9);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Nine of Diamonds", 9);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Nine of Hearts", 9);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Nine of Clubs", 9);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Ten of Spades", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Ten of Hearts", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Ten of Diamonds", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Ten of Clubs", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Jack of Spades", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Jack of Hearts", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Jack of Diamonds", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Jack of Clubs", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Queen of Spades", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Queen of Hearts", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("Queen of Diamonds", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("Queen of Clubs", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("King of Spades", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("King of Hearts", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
    temp = Card("King of Diamonds", 10);
    deck.push_back(temp);
+   deck.push_back(temp);
    temp = Card("King of Clubs", 10);
+   deck.push_back(temp);
    deck.push_back(temp);
 }
 
@@ -276,4 +321,17 @@ void endGameMessage(int num){
       default: return;
    }
    return;
+}
+
+int rerunCheck(){
+   display_message("Would you like to play again? (y/n)\n");
+   char temp = read_input();
+   if(temp == 'y' || temp == 'Y'){
+      playerHand.clear();
+      dealerHand.clear();
+      return 1;
+   }
+   else{
+      return 0;
+   }
 }
