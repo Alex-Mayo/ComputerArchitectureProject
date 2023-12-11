@@ -18,6 +18,7 @@ extern "C" {
 
 using namespace std;
 
+
 class Card{
    public:
       Card(string cardName, int value){name = cardName; num = value;};
@@ -30,11 +31,78 @@ vector<Card> deck;
 vector<Card> playerHand;
 vector<Card> dealerHand;
 
+int calculateScore(const vector<Card>& hand) {
+    int score = 0;
+    for (const Card& card : hand) {
+        score += card.num;
+    }
+    return score;
+}
+
+
+void displayGameState() {
+    // Display player's cards
+    cout << "Player's Hand: ";
+    for (const Card& card : playerHand) {
+        cout << card.name << " ";
+    }
+    cout << endl;
+
+    // Display dealer's cards
+    cout << "Dealer's Hand: ";
+    for (const Card& card : dealerHand) {
+        cout << card.name << " ";
+    }
+    cout << endl;
+
+    // Display scores
+    cout << "Player Score: " << calculateScore(playerHand) << endl;
+    cout << "Dealer Score: " << calculateScore(dealerHand) << endl;
+}
+
 int main() {
    srand(time(NULL));
    display_message("Welcome to Blackjack!\n\n");
    display_message("Press any key to start...\n");
-   cin.ignore();
+   cin.get();
+
+   // Initialize the game state
+   shuffle();
+   movePlayerCard(1);
+   movePlayerCard(2);
+   moveDealerCard(1);
+   moveDealerCard(2);
+
+   // Display the initial game state
+   displayGameState();
+
+   // Enter the game loop (you may want to replace this with your actual game logic)
+   while (true) {
+       // Display the game state before each turn
+       displayGameState();
+
+       // Read player input and perform game actions
+       char userInput = read_input();
+       if (userInput == 'q') {
+           break;  // Exit the loop if the user presses 'q'
+       }
+       else if (userInput == 'h') {
+           // Handle player hit logic
+           movePlayerCard(1);  // For simplicity, always add one card when hitting
+       }
+       else if (userInput == 's') {
+           // Handle player stand logic
+           // Implement the logic for what happens when the player stands
+           // For now, let's just break out of the loop
+           break;
+       }
+
+       // Update game state after player's action
+       // (You may want to add more game logic here)
+
+       // Check if the game is over based on your conditions
+       // (You may want to add more end-game logic here)
+   }
    
    asmMain();
 
@@ -44,6 +112,7 @@ int main() {
 void display_message(const char* message) {
    cout << message;
 }
+
 
 char read_input() {
    char input;
