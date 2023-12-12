@@ -47,6 +47,8 @@ asmMain PROC
    ret
 asmMain ENDP
 
+
+; Alex
 _gameStart PROC ; deal two cards to player and dealer
    ; Game initialization logic
    ; Check if shuffling is needed based on the deck size
@@ -77,6 +79,7 @@ _gameStart PROC ; deal two cards to player and dealer
    ret
 _gameStart ENDP
 
+; Alex
 _getPlayerScore PROC
 
    movzx rax, playerScore
@@ -91,7 +94,7 @@ _getDealerScore PROC
 
 _getDealerScore ENDP
 
-
+; Alex and Jacky
 _dealPlayer PROC
 
    push rsp
@@ -103,6 +106,7 @@ _dealPlayer PROC
 
 _dealPlayer ENDP
 
+; Alex and Jacky
 _dealDealer PROC
 
    push rsp
@@ -172,7 +176,7 @@ _getScore PROC
 
 _getScore ENDP
 
-
+; Jacky
 _playerTurn PROC
 
    hitLoop:
@@ -211,7 +215,7 @@ _playerTurn PROC
 
 _playerTurn ENDP
 
-
+; Jacky
 _dealerTurn PROC
 
    mov ax, playerScore
