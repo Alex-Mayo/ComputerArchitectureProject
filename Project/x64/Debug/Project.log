@@ -1,4 +1,2 @@
-﻿  main.cpp
-C:\Users\Alexander Mayo\Documents\Computer Architecture\Project\Project\main.cpp(68,14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Alexander Mayo\Documents\Computer Architecture\Project\Project\main.cpp(89,20): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+﻿  Assembling asmMain.asm...
   Project.vcxproj -> C:\Users\Alexander Mayo\Documents\Computer Architecture\Project\x64\Debug\Project.exe

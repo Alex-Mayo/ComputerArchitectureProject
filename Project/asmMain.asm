@@ -37,6 +37,7 @@ asmMain PROC
    call _dealerTurn
    call _gameEnd
 
+   ; Alex
    push rsp
    call rerunCheck
    add rsp, 8
@@ -79,7 +80,6 @@ _gameStart PROC ; deal two cards to player and dealer
    ret
 _gameStart ENDP
 
-; Alex
 _getPlayerScore PROC
 
    movzx rax, playerScore
@@ -118,6 +118,7 @@ _dealDealer PROC
 
 _dealDealer ENDP
 
+; Alex
 _getScore PROC
    ; Calculate scores for both player and dealer hands
 
